@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notnetflix/repositories/data_repository.dart';
 import 'package:notnetflix/utils/constant.dart';
+import 'package:provider/provider.dart';
 
 class HomeSreen extends StatefulWidget {
   const HomeSreen({Key? key}) : super(key: key);
@@ -11,7 +13,19 @@ class HomeSreen extends StatefulWidget {
 
 class _HomeSreenState extends State<HomeSreen> {
   @override
+  void initState() {
+    super.initState();
+    getMovies();
+  }
+
+  void getMovies() async {
+    final dataProvider = Provider.of<DataRepository>(context, listen: false);
+    await dataProvider.getPopularMovies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final dataProvider = Provider.of<DataRepository>(context);
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
@@ -23,6 +37,12 @@ class _HomeSreenState extends State<HomeSreen> {
           Container(
             height: 500,
             color: Colors.red,
+            child: dataProvider.popularMovieList.isEmpty
+                ? const Center()
+                : Image.network(
+                    dataProvider.popularMovieList[0].posterURL(),
+                    fit: BoxFit.cover,
+                  ),
           ),
           const SizedBox(
             height: 15,
@@ -35,23 +55,28 @@ class _HomeSreenState extends State<HomeSreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-        const SizedBox(height: 5,),
-        SizedBox(
-          height: 160,
-           child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: const EdgeInsets.only(right: 8),
-                width: 110,
-                color: Colors.yellow,
-                child: Center(
-                  child: Text(index.toString()),
-                ),
-              );
-            },
+          const SizedBox(
+            height: 5,
           ),
+          SizedBox(
+            height: 160,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  width: 110,
+                  color: Colors.yellow,
+                  child: dataProvider.popularMovieList.isEmpty
+                      ? Center(
+                          child: Text(index.toString()),
+                        )
+                      : Image.network(dataProvider.popularMovieList[index].posterURL(),
+                          fit: BoxFit.cover),
+                );
+              },
+            ),
           ),
           const SizedBox(
             height: 15,
@@ -64,23 +89,25 @@ class _HomeSreenState extends State<HomeSreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-        const SizedBox(height: 5,),
-        SizedBox(
-          height: 320,
-           child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: const EdgeInsets.only(right: 8),
-                width: 220,
-                color: Colors.blue,
-                child: Center(
-                  child: Text(index.toString()),
-                ),
-              );
-            },
+          const SizedBox(
+            height: 5,
           ),
+          SizedBox(
+            height: 320,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  width: 220,
+                  color: Colors.blue,
+                  child: Center(
+                    child: Text(index.toString()),
+                  ),
+                );
+              },
+            ),
           ),
           const SizedBox(
             height: 15,
@@ -93,23 +120,25 @@ class _HomeSreenState extends State<HomeSreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-        const SizedBox(height: 5,),
-        SizedBox(
-          height: 160,
-           child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: const EdgeInsets.only(right: 8),
-                width: 110,
-                color: Colors.green,
-                child: Center(
-                  child: Text(index.toString()),
-                ),
-              );
-            },
+          const SizedBox(
+            height: 5,
           ),
+          SizedBox(
+            height: 160,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  width: 110,
+                  color: Colors.green,
+                  child: Center(
+                    child: Text(index.toString()),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
